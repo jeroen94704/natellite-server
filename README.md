@@ -51,6 +51,7 @@ Rules:
     - appid
     - receiverid
     - senderid
+    - publishIp
     - timestamp
     - headers*
     - body
@@ -92,7 +93,7 @@ Address Passing
 
 If a sender specifies `Give-Address`, the receiver will receive the IP address of the sender, according to the following rules:
 
-* If *Public IP*s are different the value of *Public IP*.
+* If *Public IP*s are different, the value of *Public IP*.
 * Otherwise, one of the *Local IP*s that matches one the *Local IP*s of the receiver, according to heuristics (because we don't know the subnets). `127.x.x.x` will never be matched, even if it is reported as a local IP.
 
 

@@ -1,0 +1,15 @@
+{
+    "name": "natellite",
+    "version": "0.1.0",
+    "author": "Rico Huijbers <rix0rrr@gmail.com>",
+    "description": "An message reflector service",
+    "dependencies": {
+        "express" : "3.x.x",
+        "q" : "0.9.x"
+    },
+    "devDependencies": {
+        "mocha" : "1.x.x",
+        "sinon" : "1.7.x"
+    }
+}
+
