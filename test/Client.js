@@ -1,5 +1,5 @@
 var assert = require("assert");
-var Client = require('../lib/Client').Client;
+var Client = require('../lib/Client');
 
 
 describe('Client', function() {

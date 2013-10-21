@@ -1,6 +1,6 @@
 var assert  = require("assert");
-var App     = require('../lib/App').App;
-var Client  = require('../lib/Client').Client;
+var App     = require('../lib/App');
+var Client  = require('../lib/Client');
 var sinon   = require('sinon');
 
 describe('App', function() {
