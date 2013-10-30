@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var Q = require('q');
 
-function Request(params) {
+function Request(params, body) {
     var self = this;
 
     self.headers = params;
@@ -11,6 +11,11 @@ function Request(params) {
 
     self.param = function(name) {
         return params[name];
+    }
+
+    self.on = function(event, callback) {
+        if (event == 'data') callback(body);
+        if (event == 'end') callback();
     }
 }
 

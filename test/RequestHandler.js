@@ -53,4 +53,29 @@ describe('RequestHandler', function() {
             natellite.getApp('appid').getClient('clientid').enqueue(new Message('sender', {}, 'this is body'));
         });
     });
+
+    describe('.postMessage()', function() {
+        it.only('should deposit a message into the receiver queue', function(done) {
+            var req = new mocks.Request({ 'password': 'abc', 'from': 'senderid' }, 'this is the message');
+            var res = new mocks.Response();
+
+            handler.postMessage('appid', 'targetid', req, res);
+
+            natellite.getApp('appid').getClient('targetid').dequeue().then(function(message) {
+                try {
+                    assert.equal('this is the message', message.body);
+                    assert.equal('senderid', message.senderid);
+                    done();
+                } catch (x) { done(x); }
+            });
+        });
+
+        it('should not leave in sensitive data, regardless of case', function() {
+        });
+    });
+
+    describe('any message', function() {
+        it('should update client info when doing a request', function() {
+        });
+    });
 });
