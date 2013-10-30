@@ -117,11 +117,23 @@ describe('RequestHandler', function() {
         });
 
         it('should not leave in sensitive data, regardless of case', function() {
+            // FIXME: Write
         });
     });
 
-    describe('any message', function() {
-        it('should update client info when doing a request', function() {
+    describe('.showOnlineClients()', function() {
+        it('should include display name', function() {
+            var req = new mocks.Request({ 'display-name': 'Long Display Name' });
+            var res = new mocks.Response();
+
+            handler.readMessage('appid', 'clientid', req, res);
+
+            req = new mocks.Request();
+            res = new mocks.Response();
+
+            handler.showOnlineClients('appid', res);
+
+            assert.equal('+ clientid Long Display Name', res.body);
         });
     });
 });

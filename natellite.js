@@ -45,6 +45,14 @@ app.get('/:appid/c/:clientid/recv', function(req, res) {
     }
 });
 
+app.get('/:appid/online', function(req, res) {
+    try {
+        handler.showOnlineClients(req.params.appid, res);
+    } catch (e) {
+        res.send(500, e.message);
+    }
+});
+
 
 server.listen(3000);
 console.log('Listening on port 3000');
