@@ -26,7 +26,7 @@ app.get('/:appid/c/:clientid/send', function(req, res) {
 app.post('/:appid/c/:clientid/send', function(req, res) {
 });
 
-app.recv('/:appid/c/:clientid/recv', function(req, res) {
+app.get('/:appid/c/:clientid/recv', function(req, res) {
     handler.readMessage(req.appid, req.clientid, req, res);
 });
 
