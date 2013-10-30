@@ -1,7 +1,8 @@
 var express = require('express');
-var app    = express()
-    http   = require('http'),
-    server = http.createServer(app);
+var app     = express();
+var http    = require('http');
+var server  = http.createServer(app);
+var _       = require('underscore');
 
 var RequestHandler = require('./lib/RequestHandler'),
     Natellite = require('./lib/Natellite');
@@ -10,11 +11,18 @@ var natellite = new Natellite();
 var handler   = new RequestHandler(natellite);
 
 app.get('/', function(req, res){
-    res.send('Natellite server. See /APP-ID for your app');
+    res.send('Natellite server. See <a href="/APP-ID">/APP-ID</a> for your app');
 });
 
 app.get('/:appid', function(req, res) {
-    res.send('See <a href="online">online</a> for on-line clients, <a href="c/CLIENT-ID/send">c/CLIENT-ID/send</a> to send, <a href="c/CLIENT-ID/recv">c/CLIENT-ID/recv</a> to read.');
+    res.send(_.template(
+            '<ul>'
+            + '<li>Online clients: <a href="/<%= appid %>/online">/<%= appid %>/online</a></li>'
+            + '<li>Send a message: POST to <a href="/<%= appid %>/c/CLIENT-ID/send">/<%= appid %>/c/CLIENT-ID/send</a></li>'
+            + '<li>Read a message: <a href="/<%= appid %>/c/CLIENT-ID/recv">/<%= appid %>/c/CLIENT-ID/recv</a></li>'
+            + '<p>Include <tt>Password</tt> header if you want to secure your account.</p>'
+            + '</ul>',
+            req.params));
 });
 
 app.get('/:appid/c/:clientid/send', function(req, res) {
