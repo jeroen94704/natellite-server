@@ -1,5 +1,6 @@
 var assert = require("assert");
 var Client = require('../lib/Client');
+var Addresses = require('../lib/Addresses');
 
 
 describe('Client', function() {
@@ -64,9 +65,16 @@ describe('Client', function() {
         });
     });
 
+    describe('.setLocalAddresses', function() {
+        it('should strip whitespace', function() {
+            client.setLocalAddresses('1, 2, 3');
+            assert.deepEqual(['1', '2', '3'], client.addresses.local);
+        });
+    });
+
     it('should clear local IPs after being offline', function() {
-        client.setLocalIPs([1, 2, 3]);
+        client.setLocalAddresses('1, 2, 3');
         client.justCameOnline();
-        assert.deepEqual([], client.localIPs);
+        assert.deepEqual(new Addresses(), client.addresses);
     });
 });

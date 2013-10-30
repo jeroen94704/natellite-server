@@ -42,6 +42,7 @@ Rules:
 * Messages larger than 100KB will be rejected.
 * Headers with special meaning:
     * `From`, `Password`, `Display-Name`: `CLIENT-ID`, password, display name of the sender (required). Client ID is assumed to be in the same app.
+    * `Local-Address` comma-separated list of local IP addresses, in case local peer-to-peer could be initiated.
     * `Give-Address: true` will cause the receive to receive the most appropriate IP address on which it can probably contact the sender.
 * Other headers will be passed on to the receiver (`Content-Type`, `Content-Encoding`, etc.)
 
