@@ -85,7 +85,7 @@ On-line is defined as last-seen less than 5 minutes ago. The response is a UTF-8
 
     ("+" | "-") CLIENT-ID " " DISPLAY-NAME
     
-* `http://server/APP-ID/c/CLIENT-ID-A/friends/CLIENT-ID-B`: POSTing to this URL adds client B to the friends list of client A. DELETEing removes the friend from the list. (Requires `X-Password`).
+* `http://server/APP-ID/c/CLIENT-ID-A/friends/CLIENT-ID-B`: POSTing to this URL adds client B to the friends list of client A. DELETEing removes the friend from the list. (Requires `Password`).
 
 * `http://server/APP-ID/c/CLIENT-ID-A/ping` can be used to report liveness (although you should probably never use this because you can just as easily read from the queue).
 

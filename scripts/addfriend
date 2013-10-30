@@ -1,0 +1,6 @@
+#!/bin/bash
+curl -s -H 'Display-Name: Friend number 1' http://localhost:3000/app/c/other1/recv > /dev/null
+curl -s -H 'Display-Name: Guy number 2' http://localhost:3000/app/c/other2/recv > /dev/null
+curl -X POST http://localhost:3000/app/c/abc/friends/other1
+curl -X POST http://localhost:3000/app/c/abc/friends/other2
+

@@ -4,13 +4,13 @@ var Q = require('q');
 function Request(params, body) {
     var self = this;
 
-    self.headers = params;
+    self.headers = params || {};
     self.connection = {
         remoteAddress: '22.33.44.55'
     }
 
     self.param = function(name) {
-        return params[name];
+        return self.headers[name];
     }
 
     self.on = function(event, callback) {

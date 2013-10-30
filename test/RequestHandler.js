@@ -4,14 +4,18 @@ var Message        = require('../lib/Message');
 var Addresses      = require('../lib/Addresses');
 var assert         = require("assert");
 var mocks          = require('./mocks');
+var Client         = require('../lib/Client');
 
 describe('RequestHandler', function() {
     var handler;
     var natellite;
+    var fakeTime = 0;
 
     beforeEach(function() {
         natellite = new Natellite();
         handler   = new RequestHandler(natellite);
+        fakeTime = Date.parse('January 1, 2000 12:00');
+        Client.clock = function() { return fakeTime; }
     });
 
     describe('.readMessage()', function() {
@@ -123,17 +127,75 @@ describe('RequestHandler', function() {
 
     describe('.showOnlineClients()', function() {
         it('should include display name', function() {
-            var req = new mocks.Request({ 'display-name': 'Long Display Name' });
             var res = new mocks.Response();
+            handler.readMessage('appid', 'clientid', new mocks.Request({ 'display-name': 'Long Display Name' }), res);
 
-            handler.readMessage('appid', 'clientid', req, res);
-
-            req = new mocks.Request();
             res = new mocks.Response();
-
             handler.showOnlineClients('appid', res);
 
             assert.equal('+ clientid Long Display Name', res.body);
+        });
+    });
+
+    describe('.addFriend()', function() {
+        it('doesn\'t work for nonexistant clients', function() {
+            assert.throws(function() {
+                var res = new mocks.Response();
+                handler.addFriend('appid', 'clientid', new mocks.Request(), 'friendid');
+            });
+        });
+
+        it('does work for existing clients', function() {
+            var res = new mocks.Response();
+            handler.readMessage('appid', 'friendid', new mocks.Request(), res);
+
+            handler.addFriend('appid', 'clientid', new mocks.Request(), 'friendid');
+        });
+    });
+
+    describe('.showFriends', function() {
+        it('shows all friends', function() {
+            // Create friend
+            handler.readMessage('appid', 'friendid', new mocks.Request(), new mocks.Response());
+            // Add friend
+            handler.addFriend('appid', 'clientid', new mocks.Request(), 'friendid');
+
+            res = new mocks.Response();
+            handler.showFriends('appid', 'clientid', new mocks.Request(), res);
+
+            assert.equal('+ friendid', res.body);
+        });
+
+        it('correctly marks offline friends', function() {
+            // Create friend
+            handler.readMessage('appid', 'friendid', new mocks.Request(), new mocks.Response());
+            // Add friend
+            handler.addFriend('appid', 'clientid', new mocks.Request(), 'friendid');
+
+            fakeTime = Date.parse('January 1, 2000 13:00');
+
+            res = new mocks.Response();
+            handler.showFriends('appid', 'clientid', new mocks.Request(), res);
+
+            assert.equal('- friendid', res.body);
+        });
+    });
+
+    describe('.removeFriend', function() {
+        it('removes a friend from the list', function() {
+            // Create friends
+            handler.readMessage('appid', 'friend1', new mocks.Request(), new mocks.Response());
+            handler.readMessage('appid', 'friend2', new mocks.Request(), new mocks.Response());
+            // Add friend
+            handler.addFriend('appid', 'clientid', new mocks.Request(), 'friend1');
+            handler.addFriend('appid', 'clientid', new mocks.Request(), 'friend2');
+            // Remove friend
+            handler.removeFriend('appid', 'clientid', new mocks.Request(), 'friend1');
+
+            // Check remaining friends
+            res = new mocks.Response();
+            handler.showFriends('appid', 'clientid', new mocks.Request(), res);
+            assert.equal('+ friend2', res.body);
         });
     });
 });

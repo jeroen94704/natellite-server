@@ -30,27 +30,48 @@ app.get('/:appid/c/:clientid/send', function(req, res) {
 });
 
 app.post('/:appid/c/:clientid/send', function(req, res) {
-    try {
-        handler.postMessage(req.params.appid, req.params.clientid, req, res);
-    } catch (e) {
-        res.send(500, e.message);
-    }
+    handler.postMessage(req.params.appid, req.params.clientid, req, res);
 });
 
 app.get('/:appid/c/:clientid/recv', function(req, res) {
-    try {
-        handler.readMessage(req.params.appid, req.params.clientid, req, res);
-    } catch (e) {
-        res.send(500, e.message);
-    }
+    handler.readMessage(req.params.appid, req.params.clientid, req, res);
 });
 
 app.get('/:appid/online', function(req, res) {
-    try {
-        handler.showOnlineClients(req.params.appid, res);
-    } catch (e) {
-        res.send(500, e.message);
-    }
+    handler.showOnlineClients(req.params.appid, res);
+});
+
+app.get('/:appid/c/:clientid/friends', function(req, res) {
+    handler.showFriends(req.params.appid, req.params.clientid, req, res);
+});
+
+app.get('/:appid/c/:clientid/friends/:friendid', function(req, res) {
+    res.send('POST to this URL to add a friend, DELETE to unfriend');
+});
+
+app.post('/:appid/c/:clientid/friends/:friendid', function(req, res) {
+    handler.addFriend(req.params.appid, req.params.clientid, req, req.params.friendid);
+    res.send('Added friend');
+});
+
+app.delete('/:appid/c/:clientid/friends/:friendid', function(req, res) {
+    handler.removeFriend(req.params.appid, req.params.clientid, req, req.params.friendid);
+    res.send('Removed friend');
+});
+
+app.get('/:appid/c/:clientid/ping', function(req, res) {
+    handler.pingClient(req.params.appid, req.params.clientid, req);
+    res.send('Pong!');
+});
+
+app.post('/:appid/c/:clientid/ping', function(req, res) {
+    handler.pingClient(req.params.appid, req.params.clientid, req);
+    res.send('Pong!');
+});
+
+// Exception handler (must be at the end, cos that's how the middleware chain works)
+app.use(function(err, req, res, next) {
+    res.send(500, err.message);
 });
 
 

@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -X POST -H 'From: def' -H 'Give-Address: true' -H 'Content-Type: text/plain' -d 'the message' http://localhost:3000/app/c/abc/send
