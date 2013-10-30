@@ -9,8 +9,6 @@ var RequestHandler = require('./lib/RequestHandler'),
 var natellite = new Natellite();
 var handler   = new RequestHandler(natellite);
 
-app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-
 app.get('/', function(req, res){
     res.send('Natellite server. See /APP-ID for your app');
 });
@@ -24,11 +22,19 @@ app.get('/:appid/c/:clientid/send', function(req, res) {
 });
 
 app.post('/:appid/c/:clientid/send', function(req, res) {
-    handler.postMessage(req.appid, req.clientid, req, res);
+    try {
+        handler.postMessage(req.params.appid, req.params.clientid, req, res);
+    } catch (e) {
+        res.send(500, e.message);
+    }
 });
 
 app.get('/:appid/c/:clientid/recv', function(req, res) {
-    handler.readMessage(req.appid, req.clientid, req, res);
+    try {
+        handler.readMessage(req.params.appid, req.params.clientid, req, res);
+    } catch (e) {
+        res.send(500, e.message);
+    }
 });
 
 

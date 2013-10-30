@@ -44,5 +44,14 @@ describe('Addresses', function() {
             var ip = a.findCommon(b);
             assert.equal('10.0.0.1', ip);
         });
+
+        it('should return remote, even if it is the same', function() {
+            var a = new Addresses();
+            a.setRemote('1.2.3.4');
+            var b = new Addresses();
+            b.setRemote('1.2.3.4');
+
+            assert.equal('1.2.3.4', a.findCommon(b));
+        });
     });
 });
