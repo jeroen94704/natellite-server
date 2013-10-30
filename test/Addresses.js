@@ -27,6 +27,14 @@ describe('Addresses', function() {
             assert.equal('88.99.100.200', ip);
         });
 
+        it('should return remote IP for an empty address object', function() {
+            var b = new Addresses();
+
+            var ip = a.findCommon(b);
+            assert.equal('88.99.100.200', ip);
+        });
+
+
         it('should prefer matching octects to character length', function() {
             // And ignore the loopback address
             var b = new Addresses();
